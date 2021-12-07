@@ -1,8 +1,7 @@
-const imgContainer=document.querySelector(".image-container")
+const imgContainer = document.querySelector(".image-container")
 
 state = {
-    images: [],
-    comments: []
+    images: []
 }
 
 
@@ -12,13 +11,6 @@ function getImages() {
     })
 }
 
-
-
-function getComments() {
-    return fetch('http://localhost:3000/comments').then(function (resp) {
-        return resp.json()
-    })
-}
 
 
 
@@ -60,7 +52,7 @@ function renderImages() {
 
         const likesSpanEl = document.createElement('span')
         likesSpanEl.setAttribute('class', 'likes')
-        likesSpanEl.textContent = image.likes
+        likesSpanEl.textContent = image.likes + " likes"
 
         const likeBtnEl = document.createElement('button')
         likeBtnEl.setAttribute('class', 'like-button')
@@ -71,17 +63,15 @@ function renderImages() {
         const commentEl = document.createElement('ul')
         commentEl.setAttribute('class', 'comments')
 
-        const comentsLiEl = document.createElement('li')
+        for (const comment of image.comments) {
 
-        
-
-        for (const comment of state.comments) {
-
+            const comentsLiEl = document.createElement('li')
             comentsLiEl.textContent = comment.content
             console.log(comentsLiEl)
+            commentEl.append(comentsLiEl)
         }
 
-        commentEl.append(comentsLiEl)
+        
 
         articleEl.append(h2El, imgEl, likeDiv, commentEl)
         imgContainer.append(articleEl)
@@ -89,20 +79,13 @@ function renderImages() {
 }
 
 
-function render(){
+function render() {
     renderImages()
 }
 
-getImages().then( function (imagesServer) {
-    state.images=imagesServer
+getImages().then(function (imagesServer) {
+    state.images = imagesServer
     console.log(state)
     render()
 })
 
-getComments().then( function (commentServer) {
-    state.comments=commentServer
-    console.log(state)
-    render()
-})
-
-render()
